@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+{% if object_list %}
+<h2>Результаты поиска:</h2>
+
+<hr>
+<ul class="list-articles">
+	{% for p in object_list %} <!--instead of 'posts' we could have used 'object_list', if we use the ListView object in views.py-->
+			<li><div class="article-panel">
+	<p class="first">Тип регистрации: {{p.cat}}</p>
+	<p class="last">Дата последнего обновления: {{p.update_date|date:"d-m-Y H:i:s"}}</p>
+</div>
+	<h2>{{p.name}}</h2>
+	{% autoescape on %}
+	{{p.number|linebreaks|truncatewords:50}}
+	{% endautoescape %}
+			<div class="clear"></div>
+			<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Подробнее</a></p>
+			</li>
+	<hr>
+	  <form style="float:right;" action="{% url 'update' p.slug %}">
+          <input type="submit" value="Редактировать">
+      </form>
+      <form style="float:right;" action="/delete_card/{{p.slug}}/" method = "post">{% csrf_token %}
+          <input type="submit" value="Удалить">
+      </form>
+    <p>Доступные действия:</p>
+    <hr>
+{% endfor %}
+</ul>
+
+{% else %}
+<h2>Извините, нет результатов по вашему запросу.</h2>
+<br>
+<h2></h2>
+<br>
+<h2></h2>
+<br>
+<br>
+<br>
+{% endif %}
+{% endblock %}
