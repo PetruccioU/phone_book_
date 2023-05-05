@@ -1,15 +1,16 @@
 from django.db import models
 from django.urls import reverse
+from autoslug import AutoSlugField
+from django.utils.text import slugify
+
 
 # Create your models here.
-
-
 class PhoneCard(models.Model):
     phone_number = models.CharField(max_length=255, verbose_name='Номер телефона')
     name = models.CharField(max_length=255, verbose_name='ФИО физического лица/Название организации')
     company_division_name = models.CharField(max_length=255, blank=True, verbose_name='Название отдела организации')
     address = models.CharField(max_length=255, blank=True, verbose_name='Адрес проживания/организации')
-    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
+    slug = AutoSlugField(populate_from='name', max_length=255, unique=True, db_index=True, verbose_name="URL")
     create_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     update_date = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано ли")
@@ -17,6 +18,10 @@ class PhoneCard(models.Model):
 
     def __str__(self):
         return self.phone_number
+
+    # def save(self, *args, **kwargs):
+    #     self.slug = slugify(self.name)
+    #     return super(PhoneCard, self).save(*args, **kwargs)
 
     # For dynamic URL use get_absolute_url.
     def get_absolute_url(self):
