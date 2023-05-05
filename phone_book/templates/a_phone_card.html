@@ -22,35 +22,16 @@
   <p>{{card.address|linebreaks}}</p>
   <p>{{card.company_division_name|linebreaks}}</p>
   <hr>
+  <form style="float:right;" action="/delete_card/{{card.slug}}/" method="post" onsubmit="return confirm('Вы уверены, что хотите удалить эту карточку?');">
+    {% csrf_token %}
+    <input type="submit" value="Удалить">
+  </form>
   <form style="float:right;" action="{% url 'update' card.slug %}">
           <input type="submit" value="Редактировать">
   </form>
-  <form style="float:right;" action="/delete_card/{{card.slug}}/" method = "post">{% csrf_token %}
-    <input type="submit" value="Удалить">
-  </form>
+
   <p>Доступные действия:</p>
   <hr>
 </ul>
-
-<!--<ul>
-{% for i in posts %}
-<li>
-  <div class="block" style="padding-top: 10px;">
-    <h4>{{i.title}}</h4>
-    <p>{{i.content}}</p>
-    <hr>
-      <form style="float:right;" action="/deleteTodoItem/{{i.id}}/" method = "post">{% csrf_token %}
-          <input type="submit" value="Delete">
-      </form>
-      <form style="float:right;" action="/YourTodoDone/{{i.id}}/" method = "post">{% csrf_token %}
-          <input type="submit" value="Done">
-      </form>
-    <p>Change status of task:</p>
-    <hr>
-  </div>
-</li>
-    {% endfor %}
-</ul>-->
-
 
 {% endblock %}

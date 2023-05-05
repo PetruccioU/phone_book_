@@ -16,21 +16,11 @@
     <p><label class="form label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
     <div class="form-error">{{ f.errors }}</div>
   {% endfor %}
-  <!--{{ form.as_p }}-->
   <button type="submit">Отправить</button>
 </form>
-
-<!-- as_p is a function, in templates we call it without (), ot establish the fields of form-->
-
-<!--
-<form action="/addTodoView/" method = "post">{% csrf_token %}
-  <label for="fname">Task name:</label>
-  <input type="text" id="fname" name="title"><p>
-  <p><label for="w3review">Describe task:</label><p>
-  <textarea id="w3review" name="content" rows="4" cols="50">Type here please.</textarea>
-  <br>
-  <input type="submit" value="Submit">
+<form action="{% url 'all_cards' %}" method="get">
+    {% csrf_token %}
+    <input type="submit" value="Отмена">
 </form>
--->
 <hr>
 {% endblock %}

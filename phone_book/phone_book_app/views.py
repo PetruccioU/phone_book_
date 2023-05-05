@@ -13,7 +13,7 @@ from .models import *
 from .forms import *
 from .utils import *
 from django.views.generic.edit import UpdateView
-
+from django.template.defaultfilters import slugify
 
 # Create your views here.
 
@@ -64,6 +64,11 @@ class AddPhoneCardForm(LoginRequiredMixin, DataMixinPhoneCard, CreateView):
         c_def=self.get_user_context(title='Добавить новое физическое лицо')
         return {**context, **c_def}
 
+    def form_valid(self, form):
+        # "Слагифицируем" ФИО/название карточки.
+        form.instance.slug = slugify(form.cleaned_data['name'])
+        return super().form_valid(form)
+
 
 # Редактирование данных абонента:
 class CardUpdateView(LoginRequiredMixin, DataMixinPhoneCard, UpdateView):
@@ -80,7 +85,7 @@ class CardUpdateView(LoginRequiredMixin, DataMixinPhoneCard, UpdateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         catid = PhoneCard.objects.get(slug=self.kwargs['slug'])
-        context['post'] = catid
+        context['card'] = catid
         c_def=self.get_user_context(title='Обновить информацию об абоненте')
         return {**context, **c_def}
 

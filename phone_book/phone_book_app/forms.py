@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.template.defaultfilters import slugify
+
 from .models import *
 
 
@@ -13,21 +15,19 @@ class AddPersonCardForm(forms.ModelForm):
 
     class Meta:
         model = PhoneCard
+        #prepopulated_fields = {'slug': ('name',)}
         fields = ['phone_number',
-                  'slug',
                   'name',
                   'company_division_name',
                   'is_published',
                   'address',
-                  'cat']
+                  'cat',
+                  #'slug',
+                  ]
         widgets = {
             'phone_number': forms.TextInput(attrs={
                 'class': 'form-input',
                 'placeholder': 'Введите номер телефона...'
-            }),
-            'slug': forms.TextInput(attrs={
-                'class': 'form-input',
-                'placeholder': 'Введите слаг...'
             }),
             'name': forms.TextInput(attrs={
                 'class': 'form-input',
@@ -41,6 +41,10 @@ class AddPersonCardForm(forms.ModelForm):
                 'class': 'form-input',
                 'placeholder': 'Введите адрес организации...'
             }),
+            # 'slug': forms.TextInput(attrs={
+            #     'class': 'form-input',
+            #     'placeholder': 'Введите слаг...'
+            # }),
         }
 
     def clean_phone_number(self):
